@@ -31,7 +31,7 @@ export const Footer: React.FC = () => {
         {/* Crédito de autoria e contato profissional */}
         <div className="flex flex-col sm:flex-row items-center gap-4 text-xs text-[#52525B]">
           <p>
-            Desenvolvido por <span className="font-semibold text-[#09090B]">Lucas da Rosa</span> — Founder & CEO
+            Desenvolvido por <span className="font-semibold text-[#09090B]">Lucas da Rosa</span>, fundador da Rosa Network
           </p>
           <a
             href="https://wa.me/5551989509959"

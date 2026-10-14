@@ -5,7 +5,7 @@ import { ArrowLeft, Lock } from 'lucide-react';
 import { Footer } from '@/components/layout/Footer';
 
 export const metadata = {
-  title: 'Privacidade e LGPD | Rosa Network — Controle de Caixa',
+  title: 'Privacidade e LGPD | Controle de Caixa Rosa Network',
   description: 'Política de privacidade e proteção de dados pessoais em conformidade com a LGPD.',
 };
 

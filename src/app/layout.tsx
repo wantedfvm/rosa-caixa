@@ -3,7 +3,7 @@ import './globals.css';
 import { CookieConsent } from '@/components/layout/CookieConsent';
 
 export const metadata: Metadata = {
-  title: 'Rosa Network — Controle de Caixa | Simples, Organizado e Gratuito',
+  title: 'Rosa Network | Controle de Caixa: Simples, Organizado e Gratuito',
   description: 'Sistema web gratuito de controle de caixa desenvolvido pela Rosa Network. Acompanhe entradas, saídas e saldo real sem depender de planilhas manuais.',
   keywords: ['controle de caixa', 'fluxo de caixa', 'finanças pessoais', 'pequenos negócios', 'Rosa Network', 'Lucas da Rosa'],
   authors: [{ name: 'Lucas da Rosa', url: 'https://wa.me/5551989509959' }],

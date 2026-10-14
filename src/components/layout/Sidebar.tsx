@@ -10,6 +10,7 @@ import { authClient } from '@/lib/auth-client';
 export const Sidebar: React.FC = () => {
   const pathname = usePathname();
   const router = useRouter();
+  const { data: session } = authClient.useSession();
 
   const navItems = [
     { href: '/dashboard', label: 'Painel Geral', icon: LayoutDashboard },
@@ -71,7 +72,7 @@ export const Sidebar: React.FC = () => {
         </nav>
       </div>
 
-      {/* Rodapé da barra lateral: Perfil, WhatsApp do Lucas e Logout */}
+      {/* Rodape da barra lateral */}
       <div className="p-4 border-t border-[#E4E4E7] space-y-3">
         <a
           href="https://wa.me/5551989509959"
@@ -86,7 +87,9 @@ export const Sidebar: React.FC = () => {
         </a>
 
         <div className="flex items-center justify-between pt-1 text-[11px] text-[#71717A]">
-          <span className="truncate">Lucas da Rosa — CEO</span>
+          <span className="truncate max-w-[140px] font-medium text-[#09090B]">
+            {session?.user?.name || 'Minha Conta'}
+          </span>
           <button
             type="button"
             onClick={handleLogout}

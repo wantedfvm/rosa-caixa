@@ -5,7 +5,7 @@ import { ArrowLeft, Shield } from 'lucide-react';
 import { Footer } from '@/components/layout/Footer';
 
 export const metadata = {
-  title: 'Termos de Uso | Rosa Network — Controle de Caixa',
+  title: 'Termos de Uso | Controle de Caixa Rosa Network',
   description: 'Termos de uso do sistema gratuito de controle de caixa da Rosa Network.',
 };
 
@@ -43,7 +43,7 @@ export default function TermosDeUsoPage() {
           <section className="space-y-2">
             <h2 className="text-base font-bold text-[#09090B]">1. Objeto e Finalidade do Sistema</h2>
             <p>
-              O <strong>Rosa Network — Controle de Caixa</strong> é uma ferramenta web gratuita destinada ao registro simplificado de entradas, saídas, saldo e resultado de fluxo de caixa para uso pessoal, autônomo e de pequenos empreendimentos.
+              O <strong>Controle de Caixa da Rosa Network</strong> é uma ferramenta web gratuita destinada ao registro simplificado de entradas, saídas, saldo e resultado de fluxo de caixa para uso pessoal, autônomo e de pequenos empreendimentos.
             </p>
             <p>
               O sistema não constitui consultoria financeira, contábil ou fiscal e não substitui a atuação de contadores profissionais habilitados ou obrigações acessórias perante os órgãos tributários.
