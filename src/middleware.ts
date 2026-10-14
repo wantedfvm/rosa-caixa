@@ -26,11 +26,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // Redireciona usuário já logado que acessa login ou cadastro
-  if ((pathname === '/login' || pathname === '/cadastro') && sessionCookie) {
-    const url = new URL('/dashboard', request.url);
-    return NextResponse.redirect(url);
-  }
+  // Permite que /cadastro e /login sejam sempre acessiveis pelo usuario
 
   return NextResponse.next();
 }

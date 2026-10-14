@@ -18,6 +18,11 @@ export default function CadastroPage() {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  React.useEffect(() => {
+    // Garante que sessoes anteriores residuais sejam limpas ao abrir a tela de cadastro
+    authClient.signOut().catch(() => {});
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
