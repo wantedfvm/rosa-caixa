@@ -2,11 +2,11 @@ import { createClient } from '@libsql/client';
 import fs from 'fs';
 import path from 'path';
 
-const url = process.env.TURSO_DATABASE_URL || 'libsql://rosa-caixa-wantedfvm.aws-sa-east-1.turso.io';
+const url = process.env.TURSO_DATABASE_URL;
 const authToken = process.env.TURSO_AUTH_TOKEN;
 
-if (!authToken) {
-  console.error('Por favor, informe TURSO_AUTH_TOKEN via variável de ambiente.');
+if (!url || !authToken) {
+  console.error('Por favor, informe TURSO_DATABASE_URL e TURSO_AUTH_TOKEN via variáveis de ambiente.');
   process.exit(1);
 }
 
