@@ -16,8 +16,8 @@
     "db:clear": "tsx scripts/clear-mock-data.ts"
   },
   "dependencies": {
+    "@libsql/client": "^0.18.0",
     "better-auth": "^1.7.8",
-    "better-sqlite3": "^13.0.3",
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.45.4",
     "lucide-react": "^1.47.0",
@@ -29,7 +29,6 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.0.9",
-    "@types/better-sqlite3": "^7.6.12",
     "@types/node": "^22.13.5",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",

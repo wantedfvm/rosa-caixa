@@ -27,13 +27,13 @@ export async function createTransactionDAL(input: TransactionInput) {
 
   // 1. Verificação de Idempotência no Servidor
   if (validData.idempotencyKey) {
-    const existing = db.select()
+    const [existing] = await db.select()
       .from(idempotencyKeys)
       .where(and(
         eq(idempotencyKeys.key, validData.idempotencyKey),
         eq(idempotencyKeys.userId, user.id)
       ))
-      .get();
+      .limit(1);
 
     if (existing) {
       try {
@@ -69,17 +69,17 @@ export async function createTransactionDAL(input: TransactionInput) {
     updatedAt: now,
   };
 
-  db.insert(transactions).values(newRecord).run();
+  await db.insert(transactions).values(newRecord);
 
   // 4. Gravação da Chave de Idempotência
   if (validData.idempotencyKey) {
     try {
-      db.insert(idempotencyKeys).values({
+      await db.insert(idempotencyKeys).values({
         key: validData.idempotencyKey,
         userId: user.id,
         responsePayload: JSON.stringify(newRecord),
         createdAt: now,
-      }).run();
+      });
     } catch {
       // Ignora erro de inserção de chave duplicada concorrente
     }
@@ -116,9 +116,6 @@ export async function getTransactionsDAL(options: GetTransactionsOptions = {}) {
     id: transactions.id,
     userId: transactions.userId,
     categoryId: transactions.categoryId,
-    categoryName: categories.name,
-    categoryColor: categories.color,
-    categoryIcon: categories.icon,
     type: transactions.type,
     amountCents: transactions.amountCents,
     description: transactions.description,
@@ -126,6 +123,9 @@ export async function getTransactionsDAL(options: GetTransactionsOptions = {}) {
     notes: transactions.notes,
     createdAt: transactions.createdAt,
     updatedAt: transactions.updatedAt,
+    categoryName: categories.name,
+    categoryColor: categories.color,
+    categoryIcon: categories.icon,
   })
   .from(transactions)
   .leftJoin(categories, eq(transactions.categoryId, categories.id))
@@ -139,7 +139,7 @@ export async function getTransactionsDAL(options: GetTransactionsOptions = {}) {
     query.offset(options.offset);
   }
 
-  return query.all();
+  return await query;
 }
 
 /**
@@ -160,7 +160,7 @@ export async function updateTransactionDAL(id: string, input: TransactionInput) 
   const now = new Date();
 
   // Executa update estritamente com filtro duplo (id e user_id)
-  const result = db.update(transactions)
+  const result = await db.update(transactions)
     .set({
       categoryId: validData.categoryId || null,
       type: validData.type,
@@ -170,10 +170,9 @@ export async function updateTransactionDAL(id: string, input: TransactionInput) 
       notes: validData.notes || null,
       updatedAt: now,
     })
-    .where(and(eq(transactions.id, id), eq(transactions.userId, user.id)))
-    .run();
+    .where(and(eq(transactions.id, id), eq(transactions.userId, user.id)));
 
-  if (result.changes === 0) {
+  if (result.rowsAffected === 0) {
     throw new ForbiddenError('Lançamento não encontrado ou não autorizado.');
   }
 
@@ -186,11 +185,10 @@ export async function updateTransactionDAL(id: string, input: TransactionInput) 
 export async function deleteTransactionDAL(id: string) {
   const user = await getAuthenticatedUser();
 
-  const result = db.delete(transactions)
-    .where(and(eq(transactions.id, id), eq(transactions.userId, user.id)))
-    .run();
+  const result = await db.delete(transactions)
+    .where(and(eq(transactions.id, id), eq(transactions.userId, user.id)));
 
-  if (result.changes === 0) {
+  if (result.rowsAffected === 0) {
     throw new ForbiddenError('Lançamento não encontrado ou não autorizado.');
   }
 
@@ -208,14 +206,13 @@ export async function getCashDashboardMetricsDAL(periodId = 'current_month') {
   const range = getPeriodRange(periodId);
 
   // Busca dados essenciais para o cálculo financeiro
-  const allUserItems = db.select({
+  const allUserItems = await db.select({
     type: transactions.type,
     amountCents: transactions.amountCents,
     transactionDate: transactions.transactionDate,
   })
   .from(transactions)
-  .where(eq(transactions.userId, user.id))
-  .all();
+  .where(eq(transactions.userId, user.id));
 
   const metrics: CashMetricsResult = calculateCashMetrics({
     transactions: allUserItems,

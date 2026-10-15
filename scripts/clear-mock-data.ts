@@ -7,35 +7,35 @@ async function clearAllMockData() {
   console.log('Iniciando limpeza total de dados falsos e de teste...');
 
   // 1. Apaga transacoes
-  db.delete(transactions).run();
+  await db.delete(transactions);
   console.log('- Transacoes apagadas.');
 
   // 2. Apaga chaves de idempotencia
-  db.delete(idempotencyKeys).run();
+  await db.delete(idempotencyKeys);
   console.log('- Chaves de idempotencia apagadas.');
 
   // 3. Apaga configuracoes de usuario
-  db.delete(userSettings).run();
+  await db.delete(userSettings);
   console.log('- Configuracoes de usuario apagadas.');
 
   // 4. Apaga sessoes ativas
-  db.delete(session).run();
+  await db.delete(session);
   console.log('- Sessoes apagadas.');
 
   // 5. Apaga contas de autenticacao
-  db.delete(account).run();
+  await db.delete(account);
   console.log('- Contas de autenticacao apagadas.');
 
   // 6. Apaga verificacoes
-  db.delete(verification).run();
+  await db.delete(verification);
   console.log('- Verificacoes apagadas.');
 
   // 7. Apaga usuarios
-  db.delete(user).run();
+  await db.delete(user);
   console.log('- Usuarios apagados.');
 
   // 8. Apaga categorias customizadas criadas por usuarios de teste
-  db.delete(categories).where(isNotNull(categories.userId)).run();
+  await db.delete(categories).where(isNotNull(categories.userId));
   console.log('- Categorias customizadas de teste apagadas.');
 
   // 9. Garante que as categorias padrao globais continuem disponiveis para novas contas

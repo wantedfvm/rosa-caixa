@@ -11,7 +11,7 @@ import crypto from 'crypto';
 export async function validateCategoryOwnership(categoryId: string | null | undefined, userId: string): Promise<boolean> {
   if (!categoryId) return true; // Categoria nula é válida ("Sem categoria")
 
-  const cat = db.select()
+  const [cat] = await db.select()
     .from(categories)
     .where(
       and(
@@ -22,7 +22,7 @@ export async function validateCategoryOwnership(categoryId: string | null | unde
         )
       )
     )
-    .get();
+    .limit(1);
 
   return !!cat;
 }
@@ -33,15 +33,14 @@ export async function validateCategoryOwnership(categoryId: string | null | unde
 export async function getCategoriesDAL() {
   const user = await getAuthenticatedUser();
 
-  return db.select()
+  return await db.select()
     .from(categories)
     .where(
       or(
         eq(categories.isDefault, true),
         eq(categories.userId, user.id)
       )
-    )
-    .all();
+    );
 }
 
 /**
@@ -54,7 +53,7 @@ export async function createCategoryDAL(input: CategoryInput) {
   const newId = crypto.randomUUID();
   const now = new Date();
 
-  db.insert(categories).values({
+  await db.insert(categories).values({
     id: newId,
     userId: user.id,
     name: validData.name,
@@ -63,7 +62,7 @@ export async function createCategoryDAL(input: CategoryInput) {
     icon: validData.icon,
     isDefault: false,
     createdAt: now,
-  }).run();
+  });
 
   return { id: newId, ...validData };
 }
@@ -75,18 +74,17 @@ export async function createCategoryDAL(input: CategoryInput) {
 export async function deleteCategoryDAL(categoryId: string) {
   const user = await getAuthenticatedUser();
 
-  const cat = db.select()
+  const [cat] = await db.select()
     .from(categories)
     .where(and(eq(categories.id, categoryId), eq(categories.userId, user.id)))
-    .get();
+    .limit(1);
 
   if (!cat || cat.isDefault) {
     throw new ForbiddenError('Não é permitido excluir esta categoria.');
   }
 
-  db.delete(categories)
-    .where(and(eq(categories.id, categoryId), eq(categories.userId, user.id)))
-    .run();
+  await db.delete(categories)
+    .where(and(eq(categories.id, categoryId), eq(categories.userId, user.id)));
 
   return { success: true };
 }

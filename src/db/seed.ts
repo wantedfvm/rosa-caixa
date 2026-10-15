@@ -4,7 +4,7 @@ import { eq } from 'drizzle-orm';
 import crypto from 'crypto';
 
 export async function ensureDefaultCategories() {
-  const existing = db.select().from(categories).where(eq(categories.isDefault, true)).all();
+  const existing = await db.select().from(categories).where(eq(categories.isDefault, true));
   if (existing.length > 0) return;
 
   const defaults = [
@@ -27,7 +27,7 @@ export async function ensureDefaultCategories() {
 
   const now = new Date();
   for (const item of defaults) {
-    db.insert(categories).values({
+    await db.insert(categories).values({
       id: crypto.randomUUID(),
       userId: null,
       name: item.name,
@@ -36,6 +36,6 @@ export async function ensureDefaultCategories() {
       icon: item.icon,
       isDefault: true,
       createdAt: now,
-    }).run();
+    });
   }
 }

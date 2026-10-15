@@ -10,14 +10,14 @@ describe('Testes de Segurança e Isolamento de Usuários (Anti-IDOR)', () => {
   it('SEC-01: Categoria padrão global é acessível por qualquer usuário', async () => {
     // Insere categoria padrão global
     const globalId = crypto.randomUUID();
-    db.insert(categories).values({
+    await db.insert(categories).values({
       id: globalId,
       userId: null,
       name: 'Categoria Global Teste',
       type: 'both',
       isDefault: true,
       createdAt: new Date(),
-    }).run();
+    });
 
     const allowedUserB = await validateCategoryOwnership(globalId, 'user-random-id-123');
     assert.strictEqual(allowedUserB, true);
@@ -28,24 +28,24 @@ describe('Testes de Segurança e Isolamento de Usuários (Anti-IDOR)', () => {
     const userB_Id = crypto.randomUUID();
 
     // Insere usuário A
-    db.insert(user).values({
+    await db.insert(user).values({
       id: userA_Id,
       name: 'Usuário A',
       email: `usera-${Date.now()}@teste.com`,
       createdAt: new Date(),
       updatedAt: new Date(),
-    }).run();
+    });
 
     // Insere categoria privada pertencente exclusivamente ao Usuário A
     const privateCatId = crypto.randomUUID();
-    db.insert(categories).values({
+    await db.insert(categories).values({
       id: privateCatId,
       userId: userA_Id,
       name: 'Categoria Secreta do A',
       type: 'expense',
       isDefault: false,
       createdAt: new Date(),
-    }).run();
+    });
 
     // Usuário A tenta usar sua própria categoria -> Permitido (true)
     const allowedForA = await validateCategoryOwnership(privateCatId, userA_Id);
@@ -56,40 +56,40 @@ describe('Testes de Segurança e Isolamento de Usuários (Anti-IDOR)', () => {
     assert.strictEqual(allowedForB, false);
   });
 
-  it('SEC-03: Mecanismo de idempotência detecta chaves já processadas no servidor', () => {
+  it('SEC-03: Mecanismo de idempotência detecta chaves já processadas no servidor', async () => {
     const testKey = crypto.randomUUID();
     const userId = crypto.randomUUID();
     const mockPayload = JSON.stringify({ id: 'tx-123', amountCents: 15000, status: 'ok' });
 
     // Insere usuário para atender chave estrangeira
-    db.insert(user).values({
+    await db.insert(user).values({
       id: userId,
       name: 'Usuário Idempotência',
       email: `idemp-${Date.now()}@teste.com`,
       createdAt: new Date(),
       updatedAt: new Date(),
-    }).run();
+    });
 
     // 1. Primeira requisição: chave não existe no banco
-    const initialCheck = db.select()
+    const [initialCheck] = await db.select()
       .from(idempotencyKeys)
       .where(and(eq(idempotencyKeys.key, testKey), eq(idempotencyKeys.userId, userId)))
-      .get();
+      .limit(1);
     assert.strictEqual(initialCheck, undefined);
 
     // 2. Grava a resposta associada à chave
-    db.insert(idempotencyKeys).values({
+    await db.insert(idempotencyKeys).values({
       key: testKey,
       userId,
       responsePayload: mockPayload,
       createdAt: new Date(),
-    }).run();
+    });
 
     // 3. Segunda requisição com a mesma chave: detecta o registro existente
-    const duplicateCheck = db.select()
+    const [duplicateCheck] = await db.select()
       .from(idempotencyKeys)
       .where(and(eq(idempotencyKeys.key, testKey), eq(idempotencyKeys.userId, userId)))
-      .get();
+      .limit(1);
 
     assert.ok(duplicateCheck);
     assert.strictEqual(duplicateCheck.responsePayload, mockPayload);

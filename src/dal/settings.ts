@@ -9,24 +9,26 @@ import crypto from 'crypto';
 export async function getUserSettingsDAL() {
   const authUser = await getAuthenticatedUser();
 
-  let settings = db.select()
+  const [existing] = await db.select()
     .from(userSettings)
     .where(eq(userSettings.userId, authUser.id))
-    .get();
+    .limit(1);
+
+  let settings = existing;
 
   if (!settings) {
     const today = getTodayISODate();
     const newId = crypto.randomUUID();
     const now = new Date();
 
-    db.insert(userSettings).values({
+    await db.insert(userSettings).values({
       id: newId,
       userId: authUser.id,
       initialBalanceCents: 0,
       initialBalanceDate: today,
       fullName: authUser.name || '',
       updatedAt: now,
-    }).run();
+    });
 
     settings = {
       id: newId,
@@ -48,15 +50,14 @@ export async function updateUserSettingsDAL(input: UserSettingsInput) {
   const now = new Date();
   const existing = await getUserSettingsDAL();
 
-  db.update(userSettings)
+  await db.update(userSettings)
     .set({
       initialBalanceCents: validData.initialBalanceCents,
       initialBalanceDate: validData.initialBalanceDate,
       fullName: validData.fullName || authUser.name,
       updatedAt: now,
     })
-    .where(eq(userSettings.id, existing.id))
-    .run();
+    .where(eq(userSettings.id, existing.id));
 
   return { ...existing, ...validData, updatedAt: now };
 }
@@ -68,9 +69,8 @@ export async function deleteUserAccountDAL() {
   const authUser = await getAuthenticatedUser();
 
   // O schema possui onDelete: 'cascade' em todas as tabelas vinculadas
-  db.delete(user)
-    .where(eq(user.id, authUser.id))
-    .run();
+  await db.delete(user)
+    .where(eq(user.id, authUser.id));
 
   return { success: true };
 }
