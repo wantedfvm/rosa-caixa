@@ -53,9 +53,24 @@ export default function HomePage() {
       <main className="flex-1 max-w-5xl mx-auto w-full px-4 sm:px-6 py-10 sm:py-16 space-y-16">
         {/* Cabecalho e chamada principal */}
         <div className="text-center space-y-5 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F4F4F5] border border-[#E4E4E7] text-xs font-semibold text-[#09090B]">
-            <CheckCircle2 className="w-3.5 h-3.5 text-[#16A34A]" />
-            <span>Sistema gratuito sem cobranças ou anúncios</span>
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F4F4F5] border border-[#E4E4E7] text-xs font-semibold text-[#09090B]">
+              <CheckCircle2 className="w-3.5 h-3.5 text-[#16A34A]" />
+              <span>Sistema gratuito sem cobranças ou anúncios</span>
+            </div>
+
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-50 border border-rose-200/80 text-xs font-semibold text-[#881337]">
+              <div className="relative w-4 h-4 rounded-full overflow-hidden shrink-0 border border-rose-300">
+                <Image
+                  src="/mascote-rosa.png"
+                  alt="Rosinha"
+                  fill
+                  sizes="16px"
+                  className="object-cover"
+                />
+              </div>
+              <span>Com a Rosinha, mascote da Rosa Network</span>
+            </div>
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-extrabold text-[#09090B] tracking-tight leading-[1.15]">
@@ -170,6 +185,30 @@ export default function HomePage() {
             <h3 className="text-sm font-bold text-[#09090B]">Exportação para Excel</h3>
             <p className="text-xs text-[#71717A] leading-relaxed">
               Baixe seus lançamentos em arquivo compatível com Excel para enviar ao contador ou guardar um arquivo físico.
+            </p>
+          </div>
+        </div>
+
+        {/* Apresentação da Mascote Rosinha */}
+        <div className="bg-gradient-to-r from-rose-50 via-white to-pink-50/40 p-6 sm:p-8 rounded-3xl border border-rose-100 flex flex-col sm:flex-row items-center gap-6 shadow-xs">
+          <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden border-2 border-rose-200 bg-white shadow-xs shrink-0">
+            <Image
+              src="/mascote-rosa.png"
+              alt="Rosinha - Mascote Oficial Rosa Network"
+              fill
+              sizes="96px"
+              className="object-cover"
+            />
+          </div>
+          <div className="space-y-2 text-center sm:text-left flex-1">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 text-[11px] font-bold">
+              <span>Mascote Oficial</span>
+            </div>
+            <h3 className="text-xl font-bold text-[#09090B] tracking-tight">
+              Conheça a Rosinha, guardiã do seu caixa
+            </h3>
+            <p className="text-xs sm:text-sm text-[#52525B] leading-relaxed">
+              Criada para representar a união de tecnologia leve e finanças sem complicação. Com a Rosinha e a Rosa Network, seu controle financeiro se torna um hábito diário simples, ágil e prazeroso.
             </p>
           </div>
         </div>

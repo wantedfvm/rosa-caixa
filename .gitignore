@@ -35,3 +35,18 @@ yarn-error.log*
 # vercel & cloudflare
 .vercel
 .wrangler
+
+# typescript
+*.tsbuildinfo
+
+# ferramentas e configs locais de editor
+.claude/
+.cursor/
+.windsurf/
+.aider*
+.copilot/
+CLAUDE.md
+AGENTS.md
+GEMINI.md
+.vscode/
+.idea/

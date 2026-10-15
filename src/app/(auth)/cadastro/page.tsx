@@ -101,6 +101,28 @@ export default function CadastroPage() {
             Preencha seus dados para começar a controlar seu fluxo de caixa.
           </p>
         </div>
+
+        {/* Card do Mascote Rosinha */}
+        <div className="flex items-center gap-3 p-3 rounded-2xl bg-gradient-to-r from-rose-50 via-white to-pink-50/40 border border-rose-100/80 shadow-2xs">
+          <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-rose-200 bg-white shrink-0 shadow-xs">
+            <Image
+              src="/mascote-rosa.png"
+              alt="Rosinha - Mascote Rosa Network"
+              fill
+              sizes="40px"
+              className="object-cover"
+            />
+          </div>
+          <div className="min-w-0">
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs font-bold text-[#09090B]">Venha com a Rosinha!</span>
+              <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-rose-100 text-rose-700">Mascote</span>
+            </div>
+            <p className="text-[11px] text-[#71717A] truncate">
+              Livre-se de planilhas manuais e bagunça no caixa.
+            </p>
+          </div>
+        </div>
       </div>
 
       <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-md">

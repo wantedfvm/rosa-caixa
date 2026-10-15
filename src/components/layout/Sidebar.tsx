@@ -70,6 +70,34 @@ export const Sidebar: React.FC = () => {
             );
           })}
         </nav>
+
+        {/* Mascote Rosinha da Rosa Network */}
+        <div className="p-3.5 rounded-2xl bg-gradient-to-br from-rose-50 via-white to-pink-50/40 border border-rose-100 shadow-2xs relative overflow-hidden group">
+          <div className="flex items-center gap-3">
+            <div className="relative w-10 h-10 shrink-0 rounded-xl overflow-hidden border border-rose-200 bg-white shadow-xs group-hover:scale-105 transition-transform">
+              <Image
+                src="/mascote-rosa.png"
+                alt="Rosinha - Mascote Rosa Network"
+                fill
+                sizes="40px"
+                className="object-cover"
+              />
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs font-bold text-[#09090B] tracking-tight">
+                  Rosinha
+                </span>
+                <span className="text-[9px] font-bold px-1.5 py-0.2 rounded-full bg-rose-100 text-rose-700">
+                  Mascote
+                </span>
+              </div>
+              <p className="text-[10px] text-[#71717A] leading-tight mt-0.5">
+                Rosa Network ao lado do seu fluxo de caixa!
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Rodape da barra lateral */}

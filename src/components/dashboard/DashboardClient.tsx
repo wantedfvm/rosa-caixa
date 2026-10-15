@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Button } from '../ui/Button';
 import { PeriodSelector } from './PeriodSelector';
@@ -72,13 +73,29 @@ export const DashboardClient: React.FC<DashboardClientProps> = ({
     <div className="space-y-6">
       {/* Cabeçalho de Boas-Vindas e Ações Rápidas */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-[#E4E4E7] shadow-xs">
-        <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-[#09090B] tracking-tight">
-            Olá, {settings.fullName?.split(' ')[0] || 'Usuário'}!
-          </h1>
-          <p className="text-xs text-[#71717A] mt-0.5">
-            Acompanhe o saldo consolidado e o resultado financeiro.
-          </p>
+        <div className="flex items-center gap-3.5">
+          <div className="relative w-12 h-12 rounded-2xl overflow-hidden shrink-0 border border-rose-100 bg-[#FFF5F6] shadow-2xs hover:scale-105 transition-transform">
+            <Image
+              src="/mascote-rosa.png"
+              alt="Rosinha - Mascote Rosa Network"
+              fill
+              sizes="48px"
+              className="object-cover"
+            />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h1 className="text-xl sm:text-2xl font-bold text-[#09090B] tracking-tight">
+                Olá, {settings.fullName?.split(' ')[0] || 'Usuário'}!
+              </h1>
+              <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-rose-50 text-rose-700 border border-rose-200/80">
+                Rosinha no caixa 🌸
+              </span>
+            </div>
+            <p className="text-xs text-[#71717A] mt-0.5">
+              Acompanhe o saldo consolidado e o resultado financeiro.
+            </p>
+          </div>
         </div>
 
         <div className="flex items-center gap-2.5">

@@ -8,7 +8,12 @@ export const metadata: Metadata = {
   keywords: ['controle de caixa', 'fluxo de caixa', 'finanças pessoais', 'pequenos negócios', 'Rosa Network', 'Lucas da Rosa'],
   authors: [{ name: 'Lucas da Rosa', url: 'https://wa.me/5551989509959' }],
   icons: {
-    icon: '/logo-rosa.png',
+    icon: [
+      { url: '/icon.png', sizes: '64x64', type: 'image/png' },
+      { url: '/favicon.png', type: 'image/png' },
+      { url: '/logo-rosa.png', type: 'image/png' },
+    ],
+    apple: '/icon.png',
   },
 };
 
