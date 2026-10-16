@@ -60,9 +60,9 @@
     overflow-x: hidden;
   }
 
-  /* Evita auto-zoom indesejado em navegadores mobile (iOS Safari) */
-  input, select, textarea, button {
-    font-size: 16px !important;
+  /* Evita auto-zoom indesejado em navegadores mobile (iOS Safari) em campos de entrada */
+  input, select, textarea {
+    font-size: 16px;
   }
 }
 

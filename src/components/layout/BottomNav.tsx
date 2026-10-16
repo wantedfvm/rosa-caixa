@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { LayoutDashboard, ArrowLeftRight, Tag, Settings, Plus } from 'lucide-react';
 
 export interface BottomNavProps {
@@ -11,6 +11,7 @@ export interface BottomNavProps {
 
 export const BottomNav: React.FC<BottomNavProps> = ({ onOpenNewTransaction }) => {
   const pathname = usePathname();
+  const router = useRouter();
 
   const navItems = [
     { href: '/dashboard', label: 'Painel', icon: LayoutDashboard },
@@ -46,7 +47,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({ onOpenNewTransaction }) =>
         <div className="flex flex-col items-center justify-center px-2">
           <button
             type="button"
-            onClick={onOpenNewTransaction}
+            onClick={onOpenNewTransaction || (() => router.push('/movimentacoes'))}
             aria-label="Registrar nova movimentação"
             className="w-12 h-12 rounded-full bg-[#09090B] text-white flex items-center justify-center shadow-md active:scale-95 transition-transform touch-target cursor-pointer"
           >

@@ -119,20 +119,25 @@ export const DashboardClient: React.FC<DashboardClientProps> = ({
       </div>
 
       {/* Seletor de Período Temporal */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="bg-white p-3.5 sm:p-4 rounded-2xl border border-[#E4E4E7] shadow-xs space-y-2">
+        <div className="flex items-center justify-between">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-[#71717A]">
+            Filtrar por Período
+          </span>
+          <span className="text-[11px] text-[#71717A] font-medium">
+            {period.label}: {formatDateBR(period.startDate)} até {formatDateBR(period.endDate)}
+          </span>
+        </div>
         <PeriodSelector currentPeriod={period.id} />
-        <span className="text-[11px] text-[#71717A]">
-          {period.label}: {formatDateBR(period.startDate)} até {formatDateBR(period.endDate)}
-        </span>
       </div>
 
       {/* Grid de 4 Indicadores Essenciais */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {/* 1. Saldo Atual em Caixa */}
-        <div className="bg-white p-5 rounded-2xl border border-[#E4E4E7] shadow-xs space-y-2">
+        <div className="col-span-2 sm:col-span-1 bg-white p-4 sm:p-5 rounded-2xl border border-[#E4E4E7] shadow-xs space-y-1.5 sm:space-y-2">
           <div className="flex items-center justify-between text-[#71717A]">
             <span className="text-xs font-bold uppercase tracking-wider">Saldo Atual</span>
-            <div className="p-2 rounded-xl bg-[#F4F4F5] text-[#09090B]">
+            <div className="p-1.5 sm:p-2 rounded-xl bg-[#F4F4F5] text-[#09090B]">
               <Wallet className="w-4 h-4" />
             </div>
           </div>
@@ -145,42 +150,42 @@ export const DashboardClient: React.FC<DashboardClientProps> = ({
         </div>
 
         {/* 2. Total de Entradas no Período */}
-        <div className="bg-white p-5 rounded-2xl border border-[#E4E4E7] shadow-xs space-y-2">
+        <div className="col-span-1 bg-white p-4 sm:p-5 rounded-2xl border border-[#E4E4E7] shadow-xs space-y-1.5 sm:space-y-2">
           <div className="flex items-center justify-between text-[#16A34A]">
             <span className="text-xs font-bold uppercase tracking-wider text-[#71717A]">Entradas</span>
-            <div className="p-2 rounded-xl bg-[#F0FDF4] text-[#16A34A]">
+            <div className="p-1.5 sm:p-2 rounded-xl bg-[#F0FDF4] text-[#16A34A]">
               <ArrowUpRight className="w-4 h-4" />
             </div>
           </div>
-          <p className="text-2xl font-bold text-[#16A34A] tracking-tight">
+          <p className="text-xl sm:text-2xl font-bold text-[#16A34A] tracking-tight">
             {formatCurrency(metrics.periodIncomeCents)}
           </p>
-          <p className="text-[11px] text-[#71717A]">
-            Receitas no período selecionado
+          <p className="text-[11px] text-[#71717A] truncate">
+            Receitas no período
           </p>
         </div>
 
         {/* 3. Total de Saídas no Período */}
-        <div className="bg-white p-5 rounded-2xl border border-[#E4E4E7] shadow-xs space-y-2">
+        <div className="col-span-1 bg-white p-4 sm:p-5 rounded-2xl border border-[#E4E4E7] shadow-xs space-y-1.5 sm:space-y-2">
           <div className="flex items-center justify-between text-[#DC2626]">
             <span className="text-xs font-bold uppercase tracking-wider text-[#71717A]">Saídas</span>
-            <div className="p-2 rounded-xl bg-[#FEF2F2] text-[#DC2626]">
+            <div className="p-1.5 sm:p-2 rounded-xl bg-[#FEF2F2] text-[#DC2626]">
               <ArrowDownRight className="w-4 h-4" />
             </div>
           </div>
-          <p className="text-2xl font-bold text-[#DC2626] tracking-tight">
+          <p className="text-xl sm:text-2xl font-bold text-[#DC2626] tracking-tight">
             {formatCurrency(metrics.periodExpenseCents)}
           </p>
-          <p className="text-[11px] text-[#71717A]">
-            Despesas no período selecionado
+          <p className="text-[11px] text-[#71717A] truncate">
+            Despesas no período
           </p>
         </div>
 
         {/* 4. Resultado Líquido do Período */}
-        <div className="bg-white p-5 rounded-2xl border border-[#E4E4E7] shadow-xs space-y-2">
+        <div className="col-span-2 sm:col-span-1 bg-white p-4 sm:p-5 rounded-2xl border border-[#E4E4E7] shadow-xs space-y-1.5 sm:space-y-2">
           <div className="flex items-center justify-between text-[#71717A]">
             <span className="text-xs font-bold uppercase tracking-wider">Resultado</span>
-            <div className={`p-2 rounded-xl ${isNetPositive ? 'bg-[#F0FDF4] text-[#16A34A]' : 'bg-[#FEF2F2] text-[#DC2626]'}`}>
+            <div className={`p-1.5 sm:p-2 rounded-xl ${isNetPositive ? 'bg-[#F0FDF4] text-[#16A34A]' : 'bg-[#FEF2F2] text-[#DC2626]'}`}>
               <TrendingUp className="w-4 h-4" />
             </div>
           </div>

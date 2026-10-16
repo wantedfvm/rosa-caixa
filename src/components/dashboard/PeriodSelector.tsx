@@ -39,7 +39,7 @@ export const PeriodSelector: React.FC<PeriodSelectorProps> = ({ currentPeriod })
   };
 
   return (
-    <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar select-none">
+    <div className="grid grid-cols-3 sm:flex sm:items-center gap-1.5 sm:gap-2 w-full sm:w-auto select-none">
       {PERIOD_OPTIONS.map((p) => {
         const isActive = currentPeriod === p.id;
         const isLoadingThis = isPending && currentPeriod === p.id;
@@ -50,10 +50,10 @@ export const PeriodSelector: React.FC<PeriodSelectorProps> = ({ currentPeriod })
             type="button"
             onClick={() => handleSelect(p.id)}
             disabled={isPending}
-            className={`px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all border flex items-center gap-1.5 touch-target cursor-pointer ${
+            className={`py-2.5 px-2 sm:px-3.5 sm:py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all border flex items-center justify-center gap-1.5 touch-target cursor-pointer ${
               isActive
-                ? 'bg-[#09090B] text-white border-[#09090B] shadow-xs'
-                : 'bg-white text-[#52525B] border-[#E4E4E7] hover:border-[#D4D4D8] hover:text-[#09090B]'
+                ? 'bg-[#09090B] text-white border-[#09090B] shadow-xs font-bold'
+                : 'bg-white text-[#52525B] border-[#E4E4E7] hover:border-[#D4D4D8] hover:text-[#09090B] active:bg-[#F4F4F5]'
             } ${isPending && !isActive ? 'opacity-50' : ''}`}
           >
             {isLoadingThis ? <Loader2 className="w-3 h-3 animate-spin text-white" /> : null}

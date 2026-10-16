@@ -102,17 +102,44 @@ export const Sidebar: React.FC = () => {
 
       {/* Rodape da barra lateral */}
       <div className="p-4 border-t border-[#E4E4E7] space-y-3">
-        <a
-          href="https://wa.me/5551989509959"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center justify-between p-2.5 rounded-xl bg-[#F4F4F5] hover:bg-[#E4E4E7] text-xs text-[#09090B] transition-colors"
-        >
-          <div className="flex items-center gap-2">
-            <MessageCircle className="w-3.5 h-3.5 text-[#16A34A]" />
-            <span className="font-medium">Falar com Desenvolvedor</span>
+        {/* Créditos Oficiais Rosa Network */}
+        <div className="p-3.5 rounded-2xl bg-[#FAFAFA] border border-[#E4E4E7] space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-bold text-[#71717A] uppercase tracking-wider">
+              Desenvolvido por
+            </span>
+            <span className="text-[9px] font-extrabold text-[#16A34A] bg-[#F0FDF4] px-1.5 py-0.5 rounded border border-[#DCFCE7]">
+              100% Grátis
+            </span>
           </div>
-        </a>
+          <div>
+            <p className="text-xs font-bold text-[#09090B]">
+              Lucas da Rosa
+            </p>
+            <p className="text-[10px] text-[#71717A] leading-tight mt-0.5">
+              Fundador da <strong className="text-[#09090B]">Rosa Network</strong>
+            </p>
+          </div>
+          <div className="flex items-center justify-between pt-1.5 text-[11px] border-t border-[#E4E4E7]">
+            <a
+              href="https://rosanetwork.cloud"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#52525B] hover:text-[#09090B] hover:underline font-semibold text-[10px]"
+            >
+              rosanetwork.cloud ↗
+            </a>
+            <a
+              href="https://wa.me/5551989509959"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#16A34A] hover:text-[#15803D] font-bold flex items-center gap-1 text-[10px]"
+            >
+              <MessageCircle className="w-3 h-3" />
+              <span>WhatsApp</span>
+            </a>
+          </div>
+        </div>
 
         <div className="flex items-center justify-between pt-1 text-[11px] text-[#71717A]">
           <span className="truncate max-w-[140px] font-medium text-[#09090B]">
