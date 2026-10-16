@@ -15,6 +15,12 @@ export const metadata: Metadata = {
     ],
     apple: '/icon.png',
   },
+  manifest: '/manifest.webmanifest',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Rosa Caixa',
+  },
 };
 
 export default function RootLayout({
