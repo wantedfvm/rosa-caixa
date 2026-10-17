@@ -15,13 +15,16 @@ export function middleware(request: NextRequest) {
     pathname.startsWith('/_next') ||
     pathname.includes('.');
 
-  // O Better Auth armazena o token na chave de cookie 'better-auth.session_token'
-  const sessionCookie =
-    request.cookies.get('better-auth.session_token') ||
-    request.cookies.get('__Secure-better-auth.session_token');
+  // Detecta o token de sessão do Better Auth de forma flexível (com ou sem prefixo __Secure, chunked, etc)
+  const allCookies = request.cookies.getAll();
+  const hasSessionCookie = allCookies.some(
+    (c) =>
+      c.name.includes('session_token') ||
+      c.name.includes('better-auth.session')
+  );
 
   // Redireciona usuário não autenticado tentando acessar área interna
-  if (!isPublicRoute && !sessionCookie) {
+  if (!isPublicRoute && !hasSessionCookie) {
     const url = new URL('/login', request.url);
     return NextResponse.redirect(url);
   }
