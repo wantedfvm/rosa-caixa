@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer, index } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, text, integer, real, index } from 'drizzle-orm/sqlite-core';
 
 // === AUTENTICAÇÃO (BETTER AUTH) ===
 export const user = sqliteTable('user', {
@@ -101,3 +101,23 @@ export const transactions = sqliteTable('transactions', {
   index('idx_transactions_user_date').on(table.userId, table.transactionDate),
   index('idx_transactions_user_type_date').on(table.userId, table.type, table.transactionDate),
 ]);
+
+// === MÓDULO DE PRECIFICAÇÃO (PRODUTOS E SERVIÇOS) ===
+export const pricingItems = sqliteTable('pricing_items', {
+  id: text('id').primaryKey(),
+  userId: text('user_id').notNull().references(() => user.id, { onDelete: 'cascade' }),
+  name: text('name').notNull(),
+  type: text('type', { enum: ['product', 'service'] }).notNull().default('product'),
+  directCostCents: integer('direct_cost_cents').notNull().default(0), // Insumos / custos diretos em centavos
+  fixedCostPercent: real('fixed_cost_percent').notNull().default(10), // % rateio de custos fixos (aluguel, luz, MEI)
+  variableCostPercent: real('variable_cost_percent').notNull().default(5), // % impostos, taxa maquininha, comissões
+  profitMarginPercent: real('profit_margin_percent').notNull().default(30), // % margem líquida desejada
+  suggestedPriceCents: integer('suggested_price_cents').notNull().default(0), // Preço de venda calculado
+  materialsDetails: text('materials_details'), // JSON com lista de materiais/insumos [{ name, costCents }]
+  notes: text('notes'),
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull(),
+}, (table) => [
+  index('idx_pricing_user').on(table.userId),
+]);
+

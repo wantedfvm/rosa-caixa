@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { LayoutDashboard, ArrowLeftRight, Tag, Settings, Plus } from 'lucide-react';
+import { LayoutDashboard, ArrowLeftRight, Calculator, Settings, Plus } from 'lucide-react';
 
 export interface BottomNavProps {
   onOpenNewTransaction?: () => void;
@@ -16,7 +16,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({ onOpenNewTransaction }) =>
   const navItems = [
     { href: '/dashboard', label: 'Painel', icon: LayoutDashboard },
     { href: '/movimentacoes', label: 'Extrato', icon: ArrowLeftRight },
-    { href: '/categorias', label: 'Categorias', icon: Tag },
+    { href: '/precificacao', label: 'Preços', icon: Calculator },
     { href: '/configuracoes', label: 'Ajustes', icon: Settings },
   ];
 

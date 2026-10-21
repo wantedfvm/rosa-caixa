@@ -7,7 +7,7 @@ import { Button } from '../ui/Button';
 import { PeriodSelector } from './PeriodSelector';
 import { TransactionModal, CategoryOption, EditableTransactionData } from '../transactions/TransactionModal';
 import { formatCurrency, formatDateBR } from '@/lib/calculations';
-import { PlusCircle, MinusCircle, Wallet, ArrowUpRight, ArrowDownRight, TrendingUp, ArrowRight, Tag as TagIcon } from 'lucide-react';
+import { PlusCircle, MinusCircle, Wallet, ArrowUpRight, ArrowDownRight, TrendingUp, ArrowRight, Tag as TagIcon, Calculator } from 'lucide-react';
 import Link from 'next/link';
 import { EmptyState } from '../ui/EmptyState';
 
@@ -116,6 +116,32 @@ export const DashboardClient: React.FC<DashboardClientProps> = ({
             Nova Saída
           </Button>
         </div>
+      </div>
+
+      {/* Card Destaque: Módulo de Precificação */}
+      <div className="bg-gradient-to-r from-rose-50 via-white to-pink-50/50 p-4 sm:p-5 rounded-2xl border border-rose-200/90 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3.5">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-rose-100/80 text-rose-700 flex items-center justify-center shrink-0">
+            <Calculator className="w-5 h-5" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold text-[#09090B]">Novo: Módulo de Precificação</span>
+              <span className="text-[9px] font-extrabold px-1.5 py-0.2 rounded-full bg-rose-100 text-rose-700">Em Aula</span>
+            </div>
+            <p className="text-[11px] text-[#71717A] mt-0.5">
+              Calcule o preço exato para seus produtos ou serviços com base no custo direto, custos fixos e margem de lucro real.
+            </p>
+          </div>
+        </div>
+
+        <Link
+          href="/precificacao"
+          className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#09090B] text-white text-xs font-bold hover:bg-[#27272A] transition-colors self-start sm:self-auto shrink-0 shadow-xs"
+        >
+          <span>Abrir Calculadora</span>
+          <ArrowRight className="w-3.5 h-3.5" />
+        </Link>
       </div>
 
       {/* Seletor de Período Temporal */}

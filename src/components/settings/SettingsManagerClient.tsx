@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
@@ -8,7 +8,21 @@ import { MoneyInput } from '../ui/MoneyInput';
 import { Modal } from '../ui/Modal';
 import { updateUserSettingsAction } from '@/actions/transactionActions';
 import { authClient } from '@/lib/auth-client';
-import { Shield, Save, Trash2, AlertTriangle, CheckCircle2, AlertCircle } from 'lucide-react';
+import {
+  Shield,
+  Save,
+  Trash2,
+  AlertTriangle,
+  CheckCircle2,
+  AlertCircle,
+  Smartphone,
+  Download,
+  Share,
+  HelpCircle,
+  Monitor,
+  Check
+} from 'lucide-react';
+import Image from 'next/image';
 
 export interface SettingsManagerClientProps {
   initialSettings: {
@@ -31,6 +45,61 @@ export const SettingsManagerClient: React.FC<SettingsManagerClientProps> = ({
 
   const [loading, setLoading] = useState(false);
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+
+  // Estado PWA (Instalação / Adicionar à Tela Inicial)
+  const [installModalOpen, setInstallModalOpen] = useState(false);
+  const [installTab, setInstallTab] = useState<'android' | 'ios' | 'pc'>('android');
+  const [isStandalone, setIsStandalone] = useState(false);
+  const [canPromptNative, setCanPromptNative] = useState(false);
+
+  useEffect(() => {
+    // Detectar se já está rodando como app standalone
+    const standalone =
+      window.matchMedia('(display-mode: standalone)').matches ||
+      (window.navigator as any).standalone === true;
+    setIsStandalone(standalone);
+
+    // Detectar se prompt nativo está disponível
+    if (typeof window !== 'undefined' && window.deferredPWAInstallPrompt) {
+      setCanPromptNative(true);
+    }
+
+    const onPromptReady = () => setCanPromptNative(true);
+    window.addEventListener('pwa-install-ready', onPromptReady);
+
+    // Detectar sistema operacional padrão do usuário
+    const ua = navigator.userAgent || '';
+    if (/iPad|iPhone|iPod/.test(ua)) {
+      setInstallTab('ios');
+    } else if (/Android/.test(ua)) {
+      setInstallTab('android');
+    } else {
+      setInstallTab('pc');
+    }
+
+    return () => {
+      window.removeEventListener('pwa-install-ready', onPromptReady);
+    };
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (window.deferredPWAInstallPrompt) {
+      try {
+        window.deferredPWAInstallPrompt.prompt();
+        const choice = await window.deferredPWAInstallPrompt.userChoice;
+        if (choice.outcome === 'accepted') {
+          setIsStandalone(true);
+          window.deferredPWAInstallPrompt = undefined;
+          setCanPromptNative(false);
+        }
+      } catch (err) {
+        console.error('Erro ao chamar prompt nativo:', err);
+        setInstallModalOpen(true);
+      }
+    } else {
+      setInstallModalOpen(true);
+    }
+  };
 
   // Modal de exclusão definitiva (LGPD)
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -124,6 +193,55 @@ export const SettingsManagerClient: React.FC<SettingsManagerClientProps> = ({
           <span className="font-medium">{feedback.message}</span>
         </div>
       ) : null}
+
+      {/* Bloco PWA: Salvar na Tela Inicial / Instalar Aplicativo */}
+      <div className="bg-gradient-to-r from-rose-50 via-white to-pink-50/50 p-5 sm:p-6 rounded-2xl border border-rose-200 shadow-xs space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-start sm:items-center gap-3.5">
+            <div className="relative w-12 h-12 rounded-2xl overflow-hidden border border-rose-200 bg-white shrink-0 shadow-xs p-1">
+              <Image
+                src="/icon-192.png"
+                alt="Rosa Caixa Ícone"
+                width={48}
+                height={48}
+                className="object-contain rounded-xl"
+              />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h2 className="text-sm font-bold text-[#09090B]">
+                  Salvar na Tela do Celular (Aplicativo)
+                </h2>
+                {isStandalone && (
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 flex items-center gap-1">
+                    <Check className="w-3 h-3" /> Instalado
+                  </span>
+                )}
+              </div>
+              <p className="text-xs text-[#52525B] mt-0.5">
+                {isStandalone
+                  ? 'Você já está usando o Rosa Caixa em modo aplicativo nativo!'
+                  : 'Acesse em 1 clique direto da sua tela inicial como um app nativo, sem barras do navegador.'}
+              </p>
+            </div>
+          </div>
+
+          <div className="shrink-0 flex items-center gap-2">
+            <Button
+              type="button"
+              variant={isStandalone ? 'secondary' : 'primary'}
+              onClick={handleInstallClick}
+              icon={<Smartphone className="w-4 h-4" />}
+            >
+              {isStandalone
+                ? 'Como Reinstalar'
+                : canPromptNative
+                ? 'Instalar Aplicativo Agora'
+                : 'Adicionar à Tela Inicial'}
+            </Button>
+          </div>
+        </div>
+      </div>
 
       {/* Formulário Principal */}
       <form onSubmit={handleSaveSettings} className="space-y-6">
@@ -261,6 +379,126 @@ export const SettingsManagerClient: React.FC<SettingsManagerClientProps> = ({
               disabled={deleteConfirmationInput !== 'EXCLUIR'}
             >
               Apagar Tudo Definitivamente
+            </Button>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Modal de Instruções de Instalação (PWA) */}
+      <Modal
+        isOpen={installModalOpen}
+        onClose={() => setInstallModalOpen(false)}
+        title="Como Salvar o Rosa Caixa na Tela Inicial"
+        description="Acesse suas finanças instantaneamente como um app de celular."
+        maxWidth="md"
+      >
+        <div className="space-y-4 pt-2">
+          {/* Seletor de Sistema */}
+          <div className="grid grid-cols-3 gap-1.5 p-1 bg-[#F4F4F5] rounded-xl text-xs font-bold">
+            <button
+              type="button"
+              onClick={() => setInstallTab('android')}
+              className={`py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                installTab === 'android' ? 'bg-white text-[#09090B] shadow-2xs' : 'text-[#71717A]'
+              }`}
+            >
+              <Smartphone className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Android</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setInstallTab('ios')}
+              className={`py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                installTab === 'ios' ? 'bg-white text-[#09090B] shadow-2xs' : 'text-[#71717A]'
+              }`}
+            >
+              <Share className="w-3.5 h-3.5 text-blue-600" />
+              <span>iPhone (iOS)</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setInstallTab('pc')}
+              className={`py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                installTab === 'pc' ? 'bg-white text-[#09090B] shadow-2xs' : 'text-[#71717A]'
+              }`}
+            >
+              <Monitor className="w-3.5 h-3.5 text-purple-600" />
+              <span>Computador</span>
+            </button>
+          </div>
+
+          {/* Conteúdo Android */}
+          {installTab === 'android' && (
+            <div className="space-y-3 text-xs text-[#52525B] leading-relaxed">
+              <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-900 font-semibold">
+                No Google Chrome para Android:
+              </div>
+              <ol className="space-y-2 list-decimal list-inside pl-1 text-[11px]">
+                <li>
+                  Toque no menu de <strong>3 pontinhos (⋮)</strong> no canto superior direito do Chrome.
+                </li>
+                <li>
+                  Procure e toque na opção <strong>&quot;Instalar aplicativo&quot;</strong> ou <strong>&quot;Adicionar à tela inicial&quot;</strong>.
+                </li>
+                <li>
+                  Confirme tocando em <strong>&quot;Instalar&quot;</strong>.
+                </li>
+                <li>
+                  Pronto! O ícone oficial do <strong>Rosa Caixa</strong> será criado junto com seus aplicativos no celular.
+                </li>
+              </ol>
+            </div>
+          )}
+
+          {/* Conteúdo iOS (iPhone/Safari) */}
+          {installTab === 'ios' && (
+            <div className="space-y-3 text-xs text-[#52525B] leading-relaxed">
+              <div className="p-3 bg-blue-50 border border-blue-200 rounded-xl text-blue-900 font-semibold">
+                No Safari do iPhone / iPad:
+              </div>
+              <ol className="space-y-2 list-decimal list-inside pl-1 text-[11px]">
+                <li>
+                  Abra este site no navegador <strong>Safari</strong> (navegador padrão da Apple).
+                </li>
+                <li>
+                  Toque no botão de <strong>Compartilhar</strong> (ícone de um quadrado com seta para cima <strong>⎋</strong> na barra inferior).
+                </li>
+                <li>
+                  Role as opções para baixo e selecione <strong>&quot;Adicionar à Tela de Início&quot; (➕)</strong>.
+                </li>
+                <li>
+                  Toque em <strong>&quot;Adicionar&quot;</strong> no canto superior direito.
+                </li>
+                <li>
+                  O Rosa Caixa funcionará em tela cheia como se tivesse sido baixado da App Store!
+                </li>
+              </ol>
+            </div>
+          )}
+
+          {/* Conteúdo PC */}
+          {installTab === 'pc' && (
+            <div className="space-y-3 text-xs text-[#52525B] leading-relaxed">
+              <div className="p-3 bg-purple-50 border border-purple-200 rounded-xl text-purple-900 font-semibold">
+                No Chrome, Edge ou Brave no Computador:
+              </div>
+              <ol className="space-y-2 list-decimal list-inside pl-1 text-[11px]">
+                <li>
+                  Olhe na barra de endereço do navegador (ao lado da estrelinha de favoritos).
+                </li>
+                <li>
+                  Clique no ícone de <strong>Instalar</strong> (ícone de computadorzinho com uma setinha).
+                </li>
+                <li>
+                  Confirme em <strong>&quot;Instalar&quot;</strong> para abrir o Rosa Caixa em janela exclusiva e rápida.
+                </li>
+              </ol>
+            </div>
+          )}
+
+          <div className="flex justify-end pt-2">
+            <Button variant="primary" onClick={() => setInstallModalOpen(false)}>
+              Entendi
             </Button>
           </div>
         </div>

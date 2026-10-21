@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
-import { LayoutDashboard, ArrowLeftRight, Tag, Settings, LogOut, MessageCircle } from 'lucide-react';
+import { LayoutDashboard, ArrowLeftRight, Tag, Settings, LogOut, MessageCircle, Calculator } from 'lucide-react';
 import { authClient } from '@/lib/auth-client';
 
 export const Sidebar: React.FC = () => {
@@ -15,6 +15,7 @@ export const Sidebar: React.FC = () => {
   const navItems = [
     { href: '/dashboard', label: 'Painel Geral', icon: LayoutDashboard },
     { href: '/movimentacoes', label: 'Movimentações', icon: ArrowLeftRight },
+    { href: '/precificacao', label: 'Precificação', icon: Calculator },
     { href: '/categorias', label: 'Categorias', icon: Tag },
     { href: '/configuracoes', label: 'Configurações', icon: Settings },
   ];
