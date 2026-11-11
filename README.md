@@ -115,7 +115,7 @@ TURSO_DATABASE_URL="libsql://seu-banco.turso.io" TURSO_AUTH_TOKEN="seu-token" np
 Nas configurações do seu projeto na Vercel (**Settings** → **Environment Variables**), adicione:
 - `TURSO_DATABASE_URL`: `libsql://seu-banco.turso.io`
 - `TURSO_AUTH_TOKEN`: `seu-token-aqui`
-- `BETTER_AUTH_SECRET`: `sua-chave-secreta-32-chars`
+- `BETTER_AUTH_SECRET`: chave aleatória de no mínimo 32 caracteres (`openssl rand -base64 32`). **Obrigatória em produção**: sem ela o servidor se recusa a iniciar. Em desenvolvimento, se ausente, é usado um segredo aleatório temporário.
 - `BETTER_AUTH_URL`: `https://controle.rosanetwork.cloud`
 - `NEXT_PUBLIC_APP_URL`: `https://controle.rosanetwork.cloud`
 
